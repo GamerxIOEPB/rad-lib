@@ -1,8 +1,0 @@
-[package]
-name = "canvas_game"
-version = "0.1.0"
-edition = "2026"
-description = "Terminal arcade game using rad-tui low-level canvas drawing API"
-
-[dependencies]
-rad-tui = "^0.1.0"
