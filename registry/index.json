@@ -1,0 +1,48 @@
+{
+  "packages": {
+    "rad-tui": {
+      "name": "rad-tui",
+      "description": "Modern, high-performance, double-buffered Terminal User Interface (TUI) framework in pure Rad",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Modern, high-performance, double-buffered Terminal User Interface (TUI) framework in pure Rad",
+          "path": "packages/rad-tui/0.1.0",
+          "checksum": "82c717eb9cfc6420d506433aaed75016e8986dc7df6da4baf85f5ccadf82a480",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-json": {
+      "name": "rad-json",
+      "description": "Pure native Rad JSON DOM, recursive-descent parser, and serialization library",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Pure native Rad JSON DOM, recursive-descent parser, and serialization library",
+          "path": "packages/rad-json/0.1.0",
+          "checksum": "f39ca4bf7dc7d45bf2cdc1881a28a291a54ddca7b2b5880a3f4dc4a91eb7b226",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    }
+  }
+}

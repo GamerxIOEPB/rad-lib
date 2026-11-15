@@ -1,0 +1,8 @@
+[package]
+name = "file_browser"
+version = "0.1.0"
+edition = "2026"
+description = "Interactive terminal file explorer using rad-tui"
+
+[dependencies]
+rad-tui = "^0.1.0"

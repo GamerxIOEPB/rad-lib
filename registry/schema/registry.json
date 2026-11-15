@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RadRegistryIndex",
+  "type": "object",
+  "required": ["packages"],
+  "properties": {
+    "packages": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "latest", "versions", "releases"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "latest": { "type": "string" },
+          "versions": { "type": "array", "items": { "type": "string" } },
+          "releases": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "required": ["version", "path", "checksum"],
+              "properties": {
+                "version": { "type": "string" },
+                "path": { "type": "string" },
+                "checksum": { "type": "string" },
+                "license": { "type": "string" },
+                "min_rad_version": { "type": "string" },
+                "dependencies": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

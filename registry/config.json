@@ -1,0 +1,8 @@
+{
+  "name": "rad-lib",
+  "version": 1,
+  "url": "https://github.com/GamerxIOEPB/rad-lib",
+  "api": "https://raw.githubusercontent.com/GamerxIOEPB/rad-lib/main",
+  "default_branch": "main",
+  "min_rad_version": "0.2.4"
+}

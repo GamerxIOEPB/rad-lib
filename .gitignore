@@ -1,0 +1,10 @@
+# Rad build artifacts
+target/
+build/
+bin/
+*.o
+*.a
+*.so
+*.ll
+*.out
+.rad/
