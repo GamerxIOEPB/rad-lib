@@ -22,7 +22,7 @@ rad-json = "^0.1.0"
 Then install them with the Rad package manager:
 
 ```bash
-rad install
+rad package install
 ```
 
 Or add packages interactively:
