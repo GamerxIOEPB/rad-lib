@@ -43,7 +43,7 @@ rad-lib/
 ├── packages/
 │   ├── rad-tui/0.1.0/      # rad-tui package source and manifest
 │   └── rad-json/0.1.0/     # rad-json package source and manifest
-└── examples/               # Working showcase applications
+├──────────────────────
 ```
 
 ## Contributing
