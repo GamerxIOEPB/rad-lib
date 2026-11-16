@@ -3,6 +3,10 @@
 // Assertions, test case tracking, and colored terminal reporting.
 // ==============================================================================
 
+extern "C" {
+    fn exit(status: i32);
+}
+
 pub struct TestSuite {
     pub name: String,
     pub passed: usize,
@@ -118,6 +122,56 @@ impl TestSuite {
             println("\x1b[31m[SOME TESTS FAILED]\x1b[0m");
             return 1;
         }
+    }
+}
+
+// Standalone fatal assertions (calling exit(101) on failure)
+pub fn assert(cond: bool) {
+    if !cond {
+        println("\x1b[31massertion failed: condition was false\x1b[0m");
+        exit(101);
+    }
+}
+
+pub fn assert_eq(a: i64, b: i64) {
+    if a != b {
+        print("\x1b[31massertion failed: ");
+        print_num(a);
+        print(" != ");
+        print_num(b);
+        println("\x1b[0m");
+        exit(101);
+    }
+}
+
+pub fn assert_ne(a: i64, b: i64) {
+    if a == b {
+        print("\x1b[31massertion failed: ");
+        print_num(a);
+        println(" == unexpected value\x1b[0m");
+        exit(101);
+    }
+}
+
+pub fn assert_streq(a: str, b: str) {
+    if !str_eq(a, b) {
+        print("\x1b[31massertion failed: '");
+        print(a);
+        print("' != '");
+        print(b);
+        println("'\x1b[0m");
+        exit(101);
+    }
+}
+
+pub fn assert_strne(a: str, b: str) {
+    if str_eq(a, b) {
+        print("\x1b[31massertion failed: '");
+        print(a);
+        print("' == '");
+        print(b);
+        println("'\x1b[0m");
+        exit(101);
     }
 }
 
