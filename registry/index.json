@@ -43,6 +43,94 @@
           "dependencies": {}
         }
       }
+    },
+    "rad-http": {
+      "name": "rad-http",
+      "description": "Lightweight HTTP/1.1 client & micro-server in pure Rad",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Lightweight HTTP/1.1 client & micro-server in pure Rad",
+          "path": "packages/rad-http/0.1.0",
+          "checksum": "6465b7b9e8a167b7a0be2d1039b7c69aed52fb1102453515b9fecffb11163160",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-args": {
+      "name": "rad-args",
+      "description": "Declarative CLI argument parsing library with subcommands, flags, and options",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Declarative CLI argument parsing library with subcommands, flags, and options",
+          "path": "packages/rad-args/0.1.0",
+          "checksum": "d450110425707501504d52d627cb16d1874e91591edb2bfebfafd456df76d44d",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-test": {
+      "name": "rad-test",
+      "description": "Ergonomic unit testing harness with assertions and colored reporting",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Ergonomic unit testing harness with assertions and colored reporting",
+          "path": "packages/rad-test/0.1.0",
+          "checksum": "7478e23feaebe77d0d4cfcc6684e624c0b1dca94a06129ac6077be6f7816449c",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-math": {
+      "name": "rad-math",
+      "description": "2D/3D vectors, matrices, and geometry math in pure Rad",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "2D/3D vectors, matrices, and geometry math in pure Rad",
+          "path": "packages/rad-math/0.1.0",
+          "checksum": "7512bbf29ccec5a0ab87fc90ef1e4ce956738e1154d6a43be80182d9183ca532",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
     }
   }
 }
