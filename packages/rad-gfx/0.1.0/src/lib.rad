@@ -1,0 +1,278 @@
+// ==============================================================================
+// rad-gfx: Lightweight 2D Graphics Framebuffer & Image Exporter for Rad
+// Zero-dependency pure-Rad rasterizer supporting lines, rects, circles, PPM and BMP.
+// ==============================================================================
+
+pub struct Color {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+    pub a: u8,
+}
+
+impl Color {
+    pub fn rgb(r: u8, g: u8, b: u8) -> Color {
+        return Color { r: r, g: g, b: b, a: 255u8 }
+    }
+
+    pub fn rgba(r: u8, g: u8, b: u8, a: u8) -> Color {
+        return Color { r: r, g: g, b: b, a: a }
+    }
+
+    pub fn black() -> Color { return Color.rgb(0u8, 0u8, 0u8) }
+    pub fn white() -> Color { return Color.rgb(255u8, 255u8, 255u8) }
+    pub fn red() -> Color { return Color.rgb(255u8, 0u8, 0u8) }
+    pub fn green() -> Color { return Color.rgb(0u8, 255u8, 0u8) }
+    pub fn blue() -> Color { return Color.rgb(0u8, 0u8, 255u8) }
+    pub fn yellow() -> Color { return Color.rgb(255u8, 255u8, 0u8) }
+    pub fn cyan() -> Color { return Color.rgb(0u8, 255u8, 255u8) }
+    pub fn magenta() -> Color { return Color.rgb(255u8, 0u8, 255u8) }
+}
+
+pub struct Canvas {
+    pub width: usize,
+    pub height: usize,
+    pub pixels: *raw var u8,
+}
+
+fn gfx_int_abs(v: i64) -> i64 {
+    if v < 0i64 {
+        return -v
+    }
+    return v
+}
+
+fn gfx_int_to_str(val: usize) -> String {
+    if val == 0usize {
+        return String.from_str("0")
+    }
+    var buf = String.new()
+    var v = val
+    while v > 0usize {
+        let rem = (v % 10usize) as u8
+        buf.push_byte(48u8 + rem)
+        v = v / 10usize
+    }
+    // Reverse digits
+    var res = String.new()
+    var i = buf.len()
+    while i > 0usize {
+        i = i - 1usize
+        let ch = (buf.as_ptr() as *raw u8)[i]
+        res.push_byte(ch)
+    }
+    return res
+}
+
+impl Canvas {
+    pub fn new(width: usize, height: usize) -> Canvas {
+        let total_bytes = width * height * 4usize
+        let p = malloc(total_bytes) as *raw var u8
+        var c = Canvas {
+            width: width,
+            height: height,
+            pixels: p,
+        }
+        c.clear(Color.black())
+        return c
+    }
+
+    pub fn clear(var self, color: Color) {
+        var y = 0usize
+        while y < self.height {
+            var x = 0usize
+            while x < self.width {
+                self.set_pixel(x, y, color)
+                x = x + 1usize
+            }
+            y = y + 1usize
+        }
+    }
+
+    pub fn set_pixel(var self, x: usize, y: usize, color: Color) {
+        if x >= self.width || y >= self.height {
+            return
+        }
+        let idx = ((y * self.width) + x) * 4usize
+        self.pixels[idx] = color.r
+        self.pixels[idx + 1usize] = color.g
+        self.pixels[idx + 2usize] = color.b
+        self.pixels[idx + 3usize] = color.a
+    }
+
+    pub fn get_pixel(self, x: usize, y: usize) -> Color {
+        if x >= self.width || y >= self.height {
+            return Color.black()
+        }
+        let idx = ((y * self.width) + x) * 4usize
+        return Color.rgba(
+            self.pixels[idx],
+            self.pixels[idx + 1usize],
+            self.pixels[idx + 2usize],
+            self.pixels[idx + 3usize]
+        )
+    }
+
+    pub fn fill_rect(var self, x: usize, y: usize, w: usize, h: usize, color: Color) {
+        var py = y
+        let max_y = y + h
+        let max_x = x + w
+        while py < max_y && py < self.height {
+            var px = x
+            while px < max_x && px < self.width {
+                self.set_pixel(px, py, color)
+                px = px + 1usize
+            }
+            py = py + 1usize
+        }
+    }
+
+    pub fn draw_rect(var self, x: usize, y: usize, w: usize, h: usize, color: Color) {
+        if w == 0usize || h == 0usize {
+            return
+        }
+        let x1 = (x + w) - 1usize
+        let y1 = (y + h) - 1usize
+
+        var px = x
+        while px <= x1 {
+            self.set_pixel(px, y, color)
+            self.set_pixel(px, y1, color)
+            px = px + 1usize
+        }
+
+        var py = y
+        while py <= y1 {
+            self.set_pixel(x, py, color)
+            self.set_pixel(x1, py, color)
+            py = py + 1usize
+        }
+    }
+
+    pub fn draw_line(var self, x0: i64, y0: i64, x1: i64, y1: i64, color: Color) {
+        let dx = gfx_int_abs(x1 - x0)
+        var sx = -1i64
+        if x0 < x1 {
+            sx = 1i64
+        }
+        let dy = -gfx_int_abs(y1 - y0)
+        var sy = -1i64
+        if y0 < y1 {
+            sy = 1i64
+        }
+        var err = dx + dy
+
+        var cx = x0
+        var cy = y0
+        var running = true
+        while running {
+            if cx >= 0i64 && cy >= 0i64 {
+                self.set_pixel(cx as usize, cy as usize, color)
+            }
+            if cx == x1 && cy == y1 {
+                running = false
+            } else {
+                let e2 = err * 2i64
+                if e2 >= dy {
+                    err = err + dy
+                    cx = cx + sx
+                }
+                if e2 <= dx {
+                    err = err + dx
+                    cy = cy + sy
+                }
+            }
+        }
+    }
+
+    pub fn draw_circle(var self, cx: i64, cy: i64, radius: i64, color: Color) {
+        var x = 0i64
+        var y = radius
+        var d = 3i64 - (2i64 * radius)
+
+        while y >= x {
+            self.draw_circle_pts(cx, cy, x, y, color)
+            x = x + 1i64
+            if d > 0i64 {
+                y = y - 1i64
+                d = d + (4i64 * (x - y)) + 10i64
+            } else {
+                d = d + (4i64 * x) + 6i64
+            }
+        }
+    }
+
+    fn draw_circle_pts(var self, cx: i64, cy: i64, x: i64, y: i64, color: Color) {
+        if cx + x >= 0i64 && cy + y >= 0i64 { self.set_pixel((cx + x) as usize, (cy + y) as usize, color) }
+        if cx - x >= 0i64 && cy + y >= 0i64 { self.set_pixel((cx - x) as usize, (cy + y) as usize, color) }
+        if cx + x >= 0i64 && cy - y >= 0i64 { self.set_pixel((cx + x) as usize, (cy - y) as usize, color) }
+        if cx - x >= 0i64 && cy - y >= 0i64 { self.set_pixel((cx - x) as usize, (cy - y) as usize, color) }
+        if cx + y >= 0i64 && cy + x >= 0i64 { self.set_pixel((cx + y) as usize, (cy + x) as usize, color) }
+        if cx - y >= 0i64 && cy + x >= 0i64 { self.set_pixel((cx - y) as usize, (cy + x) as usize, color) }
+        if cx + y >= 0i64 && cy - x >= 0i64 { self.set_pixel((cx + y) as usize, (cy - x) as usize, color) }
+        if cx - y >= 0i64 && cy - x >= 0i64 { self.set_pixel((cx - y) as usize, (cy - x) as usize, color) }
+    }
+
+    pub fn fill_circle(var self, cx: i64, cy: i64, radius: i64, color: Color) {
+        var y = -radius
+        while y <= radius {
+            var x = -radius
+            while x <= radius {
+                if (x * x) + (y * y) <= (radius * radius) {
+                    let px = cx + x
+                    let py = cy + y
+                    if px >= 0i64 && py >= 0i64 {
+                        self.set_pixel(px as usize, py as usize, color)
+                    }
+                }
+                x = x + 1i64
+            }
+            y = y + 1i64
+        }
+    }
+
+    pub fn save_ppm(self, path: str) -> bool {
+        // Open O_WRONLY | O_CREAT | O_TRUNC (1 | 64 | 512 = 577), mode 0644 (420)
+        let fd = syscall3(2i64, path as *raw u8, 577i64, 420i64)
+        if fd < 0i64 {
+            return false
+        }
+
+        // Header: "P6\n<width> <height>\n255\n"
+        var hdr = String.from_str("P6\n")
+        hdr.push_str(gfx_int_to_str(self.width).as_ptr() as str)
+        hdr.push_byte(32u8) // ' '
+        hdr.push_str(gfx_int_to_str(self.height).as_ptr() as str)
+        hdr.push_str("\n255\n")
+
+        let _ = syscall3(1i64, fd, hdr.as_ptr() as *raw u8, hdr.len() as i64)
+
+        // Write RGB data row by row
+        let row_buf = malloc(self.width * 3usize) as *raw var u8
+        var y = 0usize
+        while y < self.height {
+            var x = 0usize
+            while x < self.width {
+                let p_idx = ((y * self.width) + x) * 4usize
+                let r_idx = x * 3usize
+                row_buf[r_idx] = self.pixels[p_idx]
+                row_buf[r_idx + 1usize] = self.pixels[p_idx + 1usize]
+                row_buf[r_idx + 2usize] = self.pixels[p_idx + 2usize]
+                x = x + 1usize
+            }
+            let _ = syscall3(1i64, fd, row_buf, (self.width * 3usize) as i64)
+            y = y + 1usize
+        }
+        free(row_buf)
+
+        let _ = syscall1(3i64, fd) // SYS_close
+        return true
+    }
+
+    pub fn destroy(var self) {
+        if (self.pixels as usize) != 0usize {
+            free(self.pixels)
+            self.pixels = 0 as *raw var u8
+        }
+    }
+}

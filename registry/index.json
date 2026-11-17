@@ -131,6 +131,94 @@
           "dependencies": {}
         }
       }
+    },
+    "rad-log": {
+      "name": "rad-log",
+      "description": "Structured logging library for Rad with ANSI colors, timestamps, and log levels",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Structured logging library for Rad with ANSI colors, timestamps, and log levels",
+          "path": "packages/rad-log/0.1.0",
+          "checksum": "faba8ca64d8e7499c5010796a537347805cad4fbdf9decda89203edb4a848fed",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-kv": {
+      "name": "rad-kv",
+      "description": "Embedded persistent append-only Key-Value store with log compaction for Rad",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Embedded persistent append-only Key-Value store with log compaction for Rad",
+          "path": "packages/rad-kv/0.1.0",
+          "checksum": "e1db9c86281fd8938a1b11028eed9394dfbabf0a2239fbc9d2c84c5677eb7e1b",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-sqlite": {
+      "name": "rad-sqlite",
+      "description": "Idiomatic C FFI bindings and query wrapper for SQLite3 in Rad",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Idiomatic C FFI bindings and query wrapper for SQLite3 in Rad",
+          "path": "packages/rad-sqlite/0.1.0",
+          "checksum": "0861a87afcfbedc4a3dfbd933aaaec7f851c7dac50ec1223c57d4f489d586979",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-gfx": {
+      "name": "rad-gfx",
+      "description": "Lightweight 2D graphics framebuffer, drawing primitives, and PPM/BMP image exporter for Rad",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Lightweight 2D graphics framebuffer, drawing primitives, and PPM/BMP image exporter for Rad",
+          "path": "packages/rad-gfx/0.1.0",
+          "checksum": "d07948be5c83a7d7b8391581711bfda05edb36a8b5dea38ceebf10e96d6e874a",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
     }
   }
 }
