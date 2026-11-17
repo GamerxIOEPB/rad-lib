@@ -219,6 +219,28 @@
           "dependencies": {}
         }
       }
+    },
+    "rad-toml": {
+      "name": "rad-toml",
+      "description": "Pure-Rad TOML parser, DOM document representation, and serializer",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Pure-Rad TOML parser, DOM document representation, and serializer",
+          "path": "packages/rad-toml/0.1.0",
+          "checksum": "dc68518feb6da08263d0662f28008ac390c91cbaa8d0de1ac9362c3e832cab9b",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
     }
   }
 }
