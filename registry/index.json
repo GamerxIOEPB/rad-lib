@@ -241,6 +241,28 @@
           "dependencies": {}
         }
       }
+    },
+    "rad-yaml": {
+      "name": "rad-yaml",
+      "description": "Pure-Rad YAML parser, DOM document tree, and serializer",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Pure-Rad YAML parser, DOM document tree, and serializer",
+          "path": "packages/rad-yaml/0.1.0",
+          "checksum": "b3b662065a03ba032e00911f3336b5f0b0b067c56ec0f505c8794b782bac8e1e",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
     }
   }
 }
