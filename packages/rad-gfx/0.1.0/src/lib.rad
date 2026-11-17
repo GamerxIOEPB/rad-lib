@@ -276,3 +276,182 @@ impl Canvas {
         }
     }
 }
+
+// ==============================================================================
+// Interactive Windowing & Framebuffer Display
+// Zero-dependency 60 FPS live rendering backend with non-blocking event polling.
+// ==============================================================================
+
+pub const EVENT_NONE: i32 = 0;
+pub const EVENT_KEY: i32 = 1;
+pub const EVENT_MOUSE: i32 = 2;
+pub const EVENT_CLOSE: i32 = 3;
+
+pub struct Event {
+    pub kind: i32,
+    pub key: u8,
+    pub mouse_x: i32,
+    pub mouse_y: i32,
+}
+
+impl Event {
+    pub fn is_key(self, ch: u8) -> bool {
+        return self.kind == EVENT_KEY && self.key == ch;
+    }
+
+    pub fn is_close(self) -> bool {
+        return self.kind == EVENT_CLOSE;
+    }
+}
+
+pub struct Window {
+    pub width: usize,
+    pub height: usize,
+    pub title: String,
+    pub open: bool,
+    pub frame_count: u64,
+}
+
+impl Window {
+    pub fn open(width: usize, height: usize, title: str) -> Window {
+        // Clear screen and hide cursor: \x1b[2J\x1b[H\x1b[?25l
+        let init_seq = "\x1b[2J\x1b[H\x1b[?25l";
+        let _ = syscall3(1i64, 1i64, init_seq as *raw u8, 10i64);
+
+        // Set stdin non-blocking:
+        let flags = syscall3(72i64, 0i64, 3i64, 0i64); // F_GETFL = 3
+        if flags >= 0i64 {
+            let _ = syscall3(72i64, 0i64, 4i64, (flags | 2048i64)); // F_SETFL, O_NONBLOCK = 2048
+        }
+
+        // Set raw terminal mode via termios ioctl if available:
+        let termios_buf = malloc(64usize) as *raw var u8;
+        let r_tc = syscall3(16i64, 0i64, 21505i64, termios_buf); // SYS_ioctl = 16, TCGETS = 0x5401
+        if r_tc == 0i64 {
+            let lflag = (termios_buf[12usize] as i32 & 255) | ((termios_buf[13usize] as i32 & 255) << 8);
+            let new_lflag = lflag & (~(2 | 8)); // disable ICANON (2) and ECHO (8)
+            termios_buf[12usize] = (new_lflag & 255) as u8;
+            termios_buf[13usize] = ((new_lflag >> 8) & 255) as u8;
+            let _ = syscall3(16i64, 0i64, 21506i64, termios_buf); // TCSETS = 0x5402
+        }
+        free(termios_buf);
+
+        return Window {
+            width: width,
+            height: height,
+            title: String.from_str(title),
+            open: true,
+            frame_count: 0u64,
+        };
+    }
+
+    pub fn draw_canvas(var self, canvas: Canvas) {
+        var out = String.new();
+        out.push_str("\x1b[H"); // Cursor home
+
+        var y = 0usize;
+        while y < canvas.height {
+            var x = 0usize;
+            while x < canvas.width {
+                let top_col = canvas.get_pixel(x, y);
+                var bot_col = Color.black();
+                if y + 1usize < canvas.height {
+                    bot_col = canvas.get_pixel(x, y + 1usize);
+                }
+
+                out.push_str("\x1b[38;2;");
+                out.push_str(gfx_int_to_str(top_col.r as usize).as_ptr() as str);
+                out.push_byte(59u8);
+                out.push_str(gfx_int_to_str(top_col.g as usize).as_ptr() as str);
+                out.push_byte(59u8);
+                out.push_str(gfx_int_to_str(top_col.b as usize).as_ptr() as str);
+                out.push_byte(109u8);
+
+                out.push_str("\x1b[48;2;");
+                out.push_str(gfx_int_to_str(bot_col.r as usize).as_ptr() as str);
+                out.push_byte(59u8);
+                out.push_str(gfx_int_to_str(bot_col.g as usize).as_ptr() as str);
+                out.push_byte(59u8);
+                out.push_str(gfx_int_to_str(bot_col.b as usize).as_ptr() as str);
+                out.push_byte(109u8);
+
+                // Upper half-block: ▀
+                out.push_byte(226u8);
+                out.push_byte(150u8);
+                out.push_byte(128u8);
+
+                x = x + 1usize;
+            }
+            out.push_str("\x1b[0m\n");
+            y = y + 2usize;
+        }
+
+        let _ = syscall3(1i64, 1i64, out.as_ptr() as *raw u8, out.len() as i64);
+        self.frame_count = self.frame_count + 1u64;
+    }
+
+    pub fn poll_event(var self) -> Option<Event> {
+        let buf = malloc(8usize) as *raw var u8;
+        let n = syscall3(0i64, 0i64, buf, 1i64);
+        if n > 0i64 {
+            let ch = buf[0usize];
+            free(buf);
+            if ch == 113u8 || ch == 81u8 || ch == 27u8 { // 'q', 'Q', ESC
+                self.open = false;
+                return Option.Some(Event {
+                    kind: EVENT_CLOSE,
+                    key: ch,
+                    mouse_x: 0,
+                    mouse_y: 0,
+                });
+            }
+            return Option.Some(Event {
+                kind: EVENT_KEY,
+                key: ch,
+                mouse_x: 0,
+                mouse_y: 0,
+            });
+        }
+        free(buf);
+        return Option.None;
+    }
+
+    pub fn is_open(self) -> bool {
+        return self.open;
+    }
+
+    pub fn close(var self) {
+        self.open = false;
+        let exit_seq = "\x1b[?25h\x1b[0m\n";
+        let _ = syscall3(1i64, 1i64, exit_seq as *raw u8, 9i64);
+
+        let termios_buf = malloc(64usize) as *raw var u8;
+        let r_tc = syscall3(16i64, 0i64, 21505i64, termios_buf);
+        if r_tc == 0i64 {
+            let lflag = (termios_buf[12usize] as i32 & 255) | ((termios_buf[13usize] as i32 & 255) << 8);
+            let new_lflag = lflag | (2 | 8);
+            termios_buf[12usize] = (new_lflag & 255) as u8;
+            termios_buf[13usize] = ((new_lflag >> 8) & 255) as u8;
+            let _ = syscall3(16i64, 0i64, 21506i64, termios_buf);
+        }
+        free(termios_buf);
+    }
+
+    pub fn sleep_frame(fps: u64) {
+        var ms = 16u64;
+        if fps > 0u64 {
+            ms = 1000u64 / fps;
+        }
+        let req = malloc(16usize) as *raw var u8;
+        let sec = (ms / 1000u64) as i64;
+        let nsec = ((ms % 1000u64) * 1000000u64) as i64;
+        var i = 0usize;
+        while i < 8usize {
+            req[i] = ((sec >> (i * 8usize)) & 255i64) as u8;
+            req[i + 8usize] = ((nsec >> (i * 8usize)) & 255i64) as u8;
+            i = i + 1usize;
+        }
+        let _ = syscall2(35i64, req, 0usize as *raw u8);
+        free(req);
+    }
+}

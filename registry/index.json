@@ -200,7 +200,7 @@
     },
     "rad-gfx": {
       "name": "rad-gfx",
-      "description": "Lightweight 2D graphics framebuffer, drawing primitives, and PPM/BMP image exporter for Rad",
+      "description": "2D graphics framebuffer, 60 FPS interactive windowing, rasterizer primitives, and image exporter",
       "latest": "0.1.0",
       "versions": [
         "0.1.0"
@@ -208,9 +208,9 @@
       "releases": {
         "0.1.0": {
           "version": "0.1.0",
-          "description": "Lightweight 2D graphics framebuffer, drawing primitives, and PPM/BMP image exporter for Rad",
+          "description": "2D graphics framebuffer, 60 FPS interactive windowing, rasterizer primitives, and image exporter",
           "path": "packages/rad-gfx/0.1.0",
-          "checksum": "d07948be5c83a7d7b8391581711bfda05edb36a8b5dea38ceebf10e96d6e874a",
+          "checksum": "2a3eb6e6ce3b8a80ba45f29f463823e13aff2832f19abe8a01acfb36aafcc942",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
