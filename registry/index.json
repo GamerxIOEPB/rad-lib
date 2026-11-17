@@ -210,7 +210,7 @@
           "version": "0.1.0",
           "description": "2D graphics framebuffer, 60 FPS interactive windowing, rasterizer primitives, and image exporter",
           "path": "packages/rad-gfx/0.1.0",
-          "checksum": "426319e32ee9e941e229ffc36d894333b29d1e35019bee66ae692f3998a865fd",
+          "checksum": "e6954736398598f12592f6784107c60156153d2ffeb3e0151c040c5f854a4d59",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
