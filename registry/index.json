@@ -210,7 +210,53 @@
           "version": "0.1.0",
           "description": "2D graphics framebuffer, 60 FPS interactive windowing, rasterizer primitives, and image exporter",
           "path": "packages/rad-gfx/0.1.0",
-          "checksum": "fd84e0e269f4c347eaa6af149554641559e90a80288d3bff53a2a753d5ac2568",
+          "checksum": "d6b48dbb7cb507e8df3be3a26efe0c957ec2ffaa56ce3cdfb99ee8404bc1b9a3",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {}
+        }
+      }
+    },
+    "rad-gui": {
+      "name": "rad-gui",
+      "description": "Reusable immediate-mode GUI kit for rad-gfx: buttons, sliders, text boxes, and draggable windows",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Reusable immediate-mode GUI kit for rad-gfx: buttons, sliders, text boxes, and draggable windows",
+          "path": "packages/rad-gui/0.1.0",
+          "checksum": "636f0f44440b51a71ca3303ca6ec1ba9d385a7293e2ce570c4a6d85c194313c1",
+          "license": "MIT",
+          "authors": [
+            "GamerxIOEPB"
+          ],
+          "min_rad_version": "0.2.4",
+          "dependencies": {
+            "rad-gfx": "0.1.0"
+          }
+        }
+      }
+    },
+    "rad-sound": {
+      "name": "rad-sound",
+      "description": "Pure native PCM audio synthesis engine, waveform generators, and retro game sound effects",
+      "latest": "0.1.0",
+      "versions": [
+        "0.1.0"
+      ],
+      "releases": {
+        "0.1.0": {
+          "version": "0.1.0",
+          "description": "Pure native PCM audio synthesis engine, waveform generators, and retro game sound effects",
+          "path": "packages/rad-sound/0.1.0",
+          "checksum": "e14da492d795a2eae188c86bd30cf730e5e03e570b324b2479ad28d8e4686571",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
