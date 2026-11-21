@@ -258,7 +258,7 @@ impl Terminal {
     }
 
     pub fn term_close(var self) {
-        self.session.close();
+        self.session.end_session();
         self.front.destroy();
         self.back.destroy();
     }
