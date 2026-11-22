@@ -1,0 +1,96 @@
+name: Rad Registry CI & Package Test Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Registry Manifest and Checksums
+        run: |
+          python3 -c '
+          import json, hashlib, os, sys
+
+          index_path = "registry/index.json"
+          with open(index_path) as f:
+              data = json.load(f)
+
+          pkgs = data.get("packages", {})
+          if not pkgs:
+              sys.exit("Error: No packages found in registry/index.json")
+
+          for name, pkg in pkgs.items():
+              assert pkg["name"] == name, f"Name mismatch: {pkg[\"name\"]} != {name}"
+              assert "latest" in pkg, f"Missing latest field in {name}"
+              assert "versions" in pkg, f"Missing versions field in {name}"
+              assert "releases" in pkg, f"Missing releases field in {name}"
+              for ver, rel in pkg["releases"].items():
+                  assert rel["version"] == ver
+                  p = rel["path"]
+                  if not os.path.isdir(p):
+                      sys.exit(f"Package directory missing: {p}")
+                  toml = os.path.join(p, "rad.toml")
+                  if not os.path.isfile(toml):
+                      sys.exit(f"rad.toml missing: {toml}")
+                  chk = hashlib.sha256(open(toml, "rb").read()).hexdigest()
+                  if rel["checksum"] != chk:
+                      sys.exit(f"Checksum mismatch for {name} {ver}: {rel[\"checksum\"]} != {chk}")
+
+          print(f"Validation successful: verified {len(pkgs)} packages and releases.")
+          '
+
+      - name: Download and Install Rad Toolchain
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/rad-dl "$HOME/.rad"
+          gh release download 0.2.4 --repo GamerxIOEPB/rad-lang --pattern "rad-*.tar.xz" --dir /tmp/rad-dl
+          tar -xf /tmp/rad-dl/rad-*.tar.xz -C "$HOME/.rad" --strip-components=1
+          echo "$HOME/.rad/bin" >> $GITHUB_PATH
+
+      - name: Run Package Functional Test Suites
+        run: |
+          checked=0
+          failed=0
+          while IFS= read -r test_file; do
+              pkg_dir="$(dirname "$(dirname "$test_file")")"
+              pkg_name="$(basename "$(dirname "$pkg_dir")")"
+              test_name="$(basename "$test_file" .rad)"
+              echo "==> Testing $pkg_name ($test_name)"
+              bin="/tmp/${pkg_name}_${test_name}"
+              if [[ "$pkg_name" == "rad-sqlite" ]]; then
+                  if radc --check "$test_file"; then
+                      echo "  [OK] $pkg_name ($test_name --check)"
+                      checked=$((checked + 1))
+                  else
+                      echo "  [FAIL] $pkg_name ($test_name --check)"
+                      failed=$((failed + 1))
+                  fi
+                  continue
+              fi
+              if radc -g -O0 "$test_file" -o "$bin"; then
+                  if "$bin"; then
+                      echo "  [OK] $pkg_name ($test_name)"
+                      checked=$((checked + 1))
+                  else
+                      echo "  [FAIL runtime] $pkg_name ($test_name)"
+                      failed=$((failed + 1))
+                  fi
+              else
+                  echo "  [FAIL compile] $pkg_name ($test_name)"
+                  failed=$((failed + 1))
+              fi
+          done < <(find packages -mindepth 4 -maxdepth 4 -type f -path '*/tests/test_*.rad' | sort)
+
+          echo "Tests checked: $checked, Failures: $failed"
+          if [[ "$failed" -gt 0 ]]; then
+              exit 1
+          fi

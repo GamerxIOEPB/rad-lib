@@ -12,7 +12,7 @@
           "version": "0.1.0",
           "description": "Modern, high-performance, double-buffered Terminal User Interface (TUI) framework in pure Rad",
           "path": "packages/rad-tui/0.1.0",
-          "checksum": "82c717eb9cfc6420d506433aaed75016e8986dc7df6da4baf85f5ccadf82a480",
+          "checksum": "c1426080ba3feca4b29fd2c07ef3093a71a412924eef22c93268b9e2df7559a7",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -34,7 +34,7 @@
           "version": "0.1.0",
           "description": "Pure native Rad JSON DOM, recursive-descent parser, and serialization library",
           "path": "packages/rad-json/0.1.0",
-          "checksum": "f39ca4bf7dc7d45bf2cdc1881a28a291a54ddca7b2b5880a3f4dc4a91eb7b226",
+          "checksum": "5943599ad7d691067b33d9d1fbbabe858ce35d97637746336b00841a2538cf24",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -56,7 +56,7 @@
           "version": "0.1.0",
           "description": "Lightweight HTTP/1.1 client & micro-server in pure Rad",
           "path": "packages/rad-http/0.1.0",
-          "checksum": "6465b7b9e8a167b7a0be2d1039b7c69aed52fb1102453515b9fecffb11163160",
+          "checksum": "2a97bb94429aa3684eb8609123e2b536ecf1cc41f5c16aecd4ccf0fa72460e82",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -78,7 +78,7 @@
           "version": "0.1.0",
           "description": "Declarative CLI argument parsing library with subcommands, flags, and options",
           "path": "packages/rad-args/0.1.0",
-          "checksum": "d450110425707501504d52d627cb16d1874e91591edb2bfebfafd456df76d44d",
+          "checksum": "61feda10a0de3b63dde20beb9699c3e6307def3e579a668016ea9bac56b5032f",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -100,7 +100,7 @@
           "version": "0.1.0",
           "description": "Ergonomic unit testing harness with assertions and colored reporting",
           "path": "packages/rad-test/0.1.0",
-          "checksum": "7478e23feaebe77d0d4cfcc6684e624c0b1dca94a06129ac6077be6f7816449c",
+          "checksum": "eaf1d3c1ebee935c8d12f696fcea4540bd60c8867fc16ca71384802bf9faff0c",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -122,7 +122,7 @@
           "version": "0.1.0",
           "description": "2D/3D vectors, matrices, and geometry math in pure Rad",
           "path": "packages/rad-math/0.1.0",
-          "checksum": "7512bbf29ccec5a0ab87fc90ef1e4ce956738e1154d6a43be80182d9183ca532",
+          "checksum": "87732245ec88f18486c3375fed5ce4e5ded244473cae1e9a2ff0caec6526b707",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -210,7 +210,7 @@
           "version": "0.1.0",
           "description": "2D graphics framebuffer, 60 FPS interactive windowing, rasterizer primitives, and image exporter",
           "path": "packages/rad-gfx/0.1.0",
-          "checksum": "d6b48dbb7cb507e8df3be3a26efe0c957ec2ffaa56ce3cdfb99ee8404bc1b9a3",
+          "checksum": "d07948be5c83a7d7b8391581711bfda05edb36a8b5dea38ceebf10e96d6e874a",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -232,7 +232,7 @@
           "version": "0.1.0",
           "description": "Reusable immediate-mode GUI kit for rad-gfx: buttons, sliders, text boxes, and draggable windows",
           "path": "packages/rad-gui/0.1.0",
-          "checksum": "636f0f44440b51a71ca3303ca6ec1ba9d385a7293e2ce570c4a6d85c194313c1",
+          "checksum": "7ac5ef30c344fe99dc865f251d1086e2e84d10ab180b47449aa18a21ec9667cd",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -256,7 +256,7 @@
           "version": "0.1.0",
           "description": "Pure native PCM audio synthesis engine, waveform generators, and retro game sound effects",
           "path": "packages/rad-sound/0.1.0",
-          "checksum": "e14da492d795a2eae188c86bd30cf730e5e03e570b324b2479ad28d8e4686571",
+          "checksum": "795cfb0f7d1fb2d46f05a2b2f5355f1f90c95d68051167002cc6cae4a5abc6af",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
@@ -300,7 +300,7 @@
           "version": "0.1.0",
           "description": "Pure-Rad YAML parser, DOM document tree, and serializer",
           "path": "packages/rad-yaml/0.1.0",
-          "checksum": "b3b662065a03ba032e00911f3336b5f0b0b067c56ec0f505c8794b782bac8e1e",
+          "checksum": "dfc626d02ee4090fe71bbb4b9dc54d85d1d0d105dcf5b12f9b8e9ba0cdd553fd",
           "license": "MIT",
           "authors": [
             "GamerxIOEPB"
