@@ -15,37 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Registry Manifest and Checksums
-        run: |
-          python3 -c '
-          import json, hashlib, os, sys
-
-          index_path = "registry/index.json"
-          with open(index_path) as f:
-              data = json.load(f)
-
-          pkgs = data.get("packages", {})
-          if not pkgs:
-              sys.exit("Error: No packages found in registry/index.json")
-
-          for name, pkg in pkgs.items():
-              assert pkg["name"] == name, f"Name mismatch: {pkg[\"name\"]} != {name}"
-              assert "latest" in pkg, f"Missing latest field in {name}"
-              assert "versions" in pkg, f"Missing versions field in {name}"
-              assert "releases" in pkg, f"Missing releases field in {name}"
-              for ver, rel in pkg["releases"].items():
-                  assert rel["version"] == ver
-                  p = rel["path"]
-                  if not os.path.isdir(p):
-                      sys.exit(f"Package directory missing: {p}")
-                  toml = os.path.join(p, "rad.toml")
-                  if not os.path.isfile(toml):
-                      sys.exit(f"rad.toml missing: {toml}")
-                  chk = hashlib.sha256(open(toml, "rb").read()).hexdigest()
-                  if rel["checksum"] != chk:
-                      sys.exit(f"Checksum mismatch for {name} {ver}: {rel[\"checksum\"]} != {chk}")
-
-          print(f"Validation successful: verified {len(pkgs)} packages and releases.")
-          '
+        run: python3 scripts/validate_registry.py
 
       - name: Download and Install Rad Toolchain
         env:
