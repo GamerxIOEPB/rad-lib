@@ -8,3 +8,4 @@ bin/
 *.ll
 *.out
 .rad/
+!packages/**/vendor/*.a
